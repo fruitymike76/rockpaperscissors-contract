@@ -9,7 +9,7 @@ import '@typechain/hardhat';
 import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import { isBytes, isHexString } from '@ethersproject/bytes';
-import { RockPaperScissors } from './typechain-types/contracts';
+import { GameContext, RockPaperScissors } from './typechain-types/contracts';
 import { keccak256, toUtf8Bytes } from 'ethers/lib/utils';
 
 dotenv.config();
@@ -156,6 +156,50 @@ task('new-game', 'creates a new rock-paper-scissors game')
             { value: hre.ethers.utils.parseEther(args.pot) }
         );
 
+        const receipt = await tx.wait();
+
+        if (receipt.events && receipt.events.length > 0)
+            console.log(receipt.events);
+        else
+            throw new Error('no events found');
+    });
+
+task('update-context', 'updates context for future games')
+    .addParam('address', 'address of the rock paper scissors contract', defaultContractAddress, types.string, true)
+    .addParam('waitingforopponenttimeout', 'time for opponent to accept a game', undefined, types.int, true)
+    .addParam('movetimeout', 'time for a player to submit/validate move', undefined, types.int, true)
+    .addParam('scorethreshold', 'score value which would trigger game resolution', undefined, types.int, true)
+    .addParam('roundthreshold', 'round count which would trigger game resolution', undefined, types.int, true)
+    .addParam('ownertipRate', 'owner tip rate in basis points', undefined, types.int, true)
+    .addParam('referraltiprate', 'referral tip rate in basis points', undefined, types.int, true)
+    .addParam('claimtimeout', 'time after anyone could claim game\'s pot', undefined, types.int, true)
+    .setAction(async (args, hre) => {
+        const defaults: GameContext.ContextDataStruct = {
+            waitingForOpponentTimeout: 1800,
+            moveTimeout: 120,
+            scoreThreshold: 3,
+            roundThreshold: 5,
+            ownerTipRate: 300,
+            referralTipRate: 200,
+            claimTimeout: 259200
+        }
+
+        const newContext: GameContext.ContextDataStruct = {
+            waitingForOpponentTimeout: args.waitingforopponenttimeout ?? defaults.waitingForOpponentTimeout,
+            moveTimeout: args.movetimeout ?? defaults.moveTimeout,
+            scoreThreshold: args.scorethreshold ?? defaults.scoreThreshold,
+            roundThreshold: args.roundthreshold ?? defaults.roundThreshold,
+            ownerTipRate: args.ownertipRate ?? defaults.ownerTipRate,
+            referralTipRate: args.referraltiprate ?? defaults.referralTipRate,
+            claimTimeout: args.claimtimeout ?? defaults.claimTimeout
+        }
+
+        const [deployer] = await hre.ethers.getSigners();
+
+        const contractFactory = await hre.ethers.getContractFactory('RockPaperScissors', deployer);
+        const contract = contractFactory.attach(args.address) as RockPaperScissors;
+
+        const tx = await contract.updateContext(newContext);
         const receipt = await tx.wait();
 
         if (receipt.events && receipt.events.length > 0)

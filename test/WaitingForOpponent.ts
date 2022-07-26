@@ -39,7 +39,6 @@ describe('When waiting for opponent...', () => {
 
             // assert balance
             expect(initialWalletBalance).to.be.equal(currentWalletBalance.sub(DEFAULT_BET).add(diff), 'Initial and current wallet balance must match after adjustment');
-            expect(game.pot).to.be.equal(0, 'Game\'s pot must be empty');
             expect(initialContractBalance).to.be.equal(currentContractBalance.add(DEFAULT_BET), 'Initial and current contract balances must match after adjustment');
 
             // assert game
@@ -214,7 +213,6 @@ describe('When waiting for opponent...', () => {
                 .to.emit(contract, event)
                 .withArgs(gameId, GameState.Finished);
             expect(game.state).to.be.equal(GameState.Finished, 'must be finished');
-            expect(game.pot).to.be.equal(BigNumber.from(0), 'must be zero');
             expect(game.winner).to.be.equal(referral.address, 'refrral must be winner');
             expect(game.updateTimestamp).to.be.equal(block.timestamp, 'timestmaps must match');
             expect(initialContractBalance).to.be.equal(contractBalance, 'contract balances must match');

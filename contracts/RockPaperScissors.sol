@@ -119,9 +119,7 @@ contract RockPaperScissors is Balance, GameContext, Referral {
 
         // refund
         if (game.pot > 0) {
-            uint256 pot = game.pot;
-            game.pot = 0;
-            payable(game.challenger.adr).transfer(pot);
+            payable(game.challenger.adr).transfer(game.pot);
         }
 
         // publish events
@@ -173,7 +171,6 @@ contract RockPaperScissors is Balance, GameContext, Referral {
     {
         Game storage game = _games[gameId];
         Player storage otherPlayer = _getOtherPlayer(game);
-        _resolvePot(game, otherPlayer.adr);
         _finishGame(game, otherPlayer.adr);
         emit GameUpdated(gameId, game.state);
     }
@@ -361,7 +358,6 @@ contract RockPaperScissors is Balance, GameContext, Referral {
         ContextData storage context = _contexts[game.contextIndex];
 
         uint256 pot = game.pot;
-        game.pot = 0;
 
         uint256 ownerTip = _calculateBasisPoint(pot, context.ownerTipRate);
 

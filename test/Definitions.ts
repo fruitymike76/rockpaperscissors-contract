@@ -312,7 +312,6 @@ export const bootstrapFinishedGame = async (
 
     const { game } = await contract.getGame(gameId);
     expect(game.state).to.be.equal(GameState.Finished, 'must be finished');
-    expect(game.pot).to.be.equal(BigNumber.from(0), 'pot must be resolved');
     expect(game.winner).to.be.not.equal(constants.AddressZero, 'winner must be assigned');
 
     return {
@@ -402,7 +401,7 @@ export const parseMove = (hash: string): Move => {
     }
 }
 
-export const calculateRewards = (pot: BigNumber, ownerTip: BigNumber, referralTip: BigNumber) => {
+export const calculateRewards = (pot: BigNumber, ownerTip: number, referralTip: number) => {
     const basis = BigNumber.from(10000);
     const owner = pot.mul(ownerTip).div(basis);
     const referral = pot.mul(referralTip).div(basis);

@@ -5,13 +5,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 abstract contract GameContext is Ownable {
     struct ContextData {
-        uint256 waitingForOpponentTimeout;
-        uint256 moveTimeout;
-        uint8 scoreThreshold;
-        uint8 roundThreshold;
-        uint256 ownerTipRate;
-        uint256 referralTipRate;
-        uint256 claimTimeout;
+        uint32 waitingForOpponentTimeout;
+        uint32 moveTimeout;
+        uint32 scoreThreshold;
+        uint32 roundThreshold;
+        uint32 ownerTipRate;
+        uint32 referralTipRate;
+        uint32 claimTimeout;
     }
 
     mapping(uint256 => ContextData) internal _contexts;

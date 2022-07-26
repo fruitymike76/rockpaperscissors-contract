@@ -364,7 +364,6 @@ describe('When waiting for unhashed move submissons...', () => {
                 .withArgs(gameId, GameState.Finished);
             expect(game.state).to.be.equal(GameState.Finished, 'Game must be finished');
             expect(game.updateTimestamp).to.be.equal(block.timestamp, 'Timestamp must match');
-            expect(game.pot).to.be.equal(0, 'Game pot must be empty');
             expect(oldOpponentBalance.add(output.winner)).to.be.equal(opponentBalance, 'Adjusted opponent balance must match');
             expect(oldOwnerBalance.add(output.owner)).to.be.equal(ownerBalance, 'Adjusted owner balance must match');
             expect(oldReferralBalance.add(output.referral)).to.be.equal(referralBalance, 'Adjusted referral balance must match');
@@ -400,7 +399,6 @@ describe('When waiting for unhashed move submissons...', () => {
                 .withArgs(gameId, GameState.Finished);
             expect(game.state).to.be.equal(GameState.Finished, 'Game must be finished');
             expect(game.updateTimestamp).to.be.equal(block.timestamp, 'Timestamps must match');
-            expect(game.pot).to.be.equal(0, 'Game pot must be empty');
             expect(oldChallengerBalance.add(output.winner)).to.be.equal(challengerBalance, 'Adjusted challenger balance must match');
             expect(oldOwnerBalance.add(output.owner)).to.be.equal(ownerBalance, 'Adjusted owner balance must match');
             expect(oldReferralBalance.add(output.referral)).to.be.equal(referralBalance, 'Adjusted referral balance must match');
@@ -496,7 +494,6 @@ describe('When waiting for unhashed move submissons...', () => {
                 .to.emit(contract, event)
                 .withArgs(gameId, GameState.Finished);
             expect(game.state).to.be.equal(GameState.Finished, 'must be finished');
-            expect(game.pot).to.be.equal(BigNumber.from(0), 'must be zero');
             expect(game.winner).to.be.equal(challenger.address, 'challenger must be winner');
             expect(game.updateTimestamp).to.be.equal(block.timestamp, 'timestmaps must match');
             expect(initialContractBalance).to.be.equal(contractBalance, 'contract balances must match');
@@ -555,7 +552,6 @@ describe('When waiting for unhashed move submissons...', () => {
                 .to.emit(contract, event)
                 .withArgs(gameId, GameState.Finished);
             expect(game.state).to.be.equal(GameState.Finished, 'must be finished');
-            expect(game.pot).to.be.equal(BigNumber.from(0), 'must be zero');
             expect(game.winner).to.be.equal(opponent.address, 'opponent must be winner');
             expect(game.updateTimestamp).to.be.equal(block.timestamp, 'timestmaps must match');
             expect(initialContractBalance).to.be.equal(contractBalance, 'contract balances must match');
@@ -610,7 +606,6 @@ describe('When waiting for unhashed move submissons...', () => {
                 .to.emit(contract, event)
                 .withArgs(gameId, GameState.Finished);
             expect(game.state).to.be.equal(GameState.Finished, 'must be finished');
-            expect(game.pot).to.be.equal(BigNumber.from(0), 'must be zero');
             expect(game.winner).to.be.equal(referral.address, 'refrral must be winner');
             expect(game.updateTimestamp).to.be.equal(block.timestamp, 'timestmaps must match');
             expect(initialContractBalance).to.be.equal(contractBalance, 'contract balances must match');
